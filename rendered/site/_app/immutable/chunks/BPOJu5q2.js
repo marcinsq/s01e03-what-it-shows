@@ -1,0 +1,1 @@
+import{E as e,F as t,N as n,d as r,f as i,q as a,t as o,w as s,y as c}from"./_lMV_EUJ.js";var l=e(`<aside><!></aside>`);function u(e,u){let d=o(u,`kind`,3,`note`);var f=l(),p=t(f);c(p,()=>u.children),a(f),n(()=>r(f,1,i(d()),`svelte-17bri61`)),s(e,f)}export{u as t};

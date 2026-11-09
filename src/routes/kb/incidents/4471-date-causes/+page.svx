@@ -1,0 +1,41 @@
+---
+layout: runbook
+title: '4471 · two date-handling causes'
+owner: Silver Badger
+status: proposed
+reviewed: 2026-11-07
+signature: 'Silver Badger'
+---
+
+<script>
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+The 412 unique reports merged into #4471 do not describe one defect. Using each tenant's locale, booking form, and intake channel separates them into two causes. The table counts unique report IDs, so overlapping export rows are not counted twice.
+
+## The merged reports
+
+<CauseTable ticket={4471} />
+
+The `intakeTag` is not a reliable cause label. Reports tagged `hint` also appear in the parser group, and reports tagged `parser` also appear in the form-hint group. Classify by tenant configuration and channel instead.
+
+## Cause 1: shared parser reads month first
+
+**379 reports · 11 tenants · app, email, and form**
+
+The shared parser reads every date month-first. Tenants whose locale writes the day before the month therefore get swapped dates. For example, report `R-41200` says a 7 April reminder went out on 4 July.
+
+The desk's five `oneDayMove` notes remain in this cause group. The KB classifies them by tenant configuration; the one-day symptom is not a separate root cause.
+
+## Cause 2: booking-v3 hint conflicts with locale parsing
+
+**33 reports · 3 tenants · form only**
+
+The `booking-v3` form displays `MM/DD/YYYY`, even for tenants whose locale is day-first. People follow that hint, but the form reads the submitted value according to the tenant locale. This creates a separate defect from the shared parser. The affected tenants are `alder.physio` (12 reports), `copper.studio` (11), and `pale.harbour` (10).
+
+## Ticket split
+
+File one ticket for each cause: 379 reports for the shared parser and 33 for the `booking-v3` hint. These tickets should not be merged based on similar subjects or intake tags.
+
+<RenderStamp {signature} />

@@ -1,0 +1,1 @@
+export{n as component}from"../chunks/DVS-K88y.js";
